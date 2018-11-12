@@ -20,7 +20,7 @@
 all: build
 
 VERSION?=v1.5.2
-PREFIX?=staging-k8s.gcr.io
+PREFIX?=us.gcr.io/gigalixir-152404
 ARCH?=amd64
 GOLANG_VERSION=1.10
 TEMP_DIR:=$(shell mktemp -d)
@@ -57,7 +57,7 @@ build:
 		&& go get github.com/sparrc/gdm \
 		&& gdm restore \
 		&& ln -s /go/src/github.com/influxdb/influxdb /go/src/github.com/influxdata/ \
-		&& GOARCH=$(ARCH) CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags=\"-s\" -o /build/influxd ./cmd/influxd"
+		&& GOARCH=$(ARCH) CGO_ENABLED=0 go build -a --installsuffix cgo --ldflags=\"-s -X main.version=$(VERSION)\" -o /build/influxd ./cmd/influxd"
 
 	docker build --pull -t $(PREFIX)/heapster-influxdb-$(ARCH):$(VERSION) $(TEMP_DIR)
 
